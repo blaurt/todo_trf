@@ -1,0 +1,57 @@
+services:
+  # nextjs-app:
+  #   container_name: todo_trf_front_end
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - NODE_ENV=production
+  #   restart: unless-stopped
+
+
+  # app:
+  #   image: node:alpine
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+  #   command: sh -c "npm install && npm start"
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - LANG=en_US.utf8
+      - LC_COLLATE=C
+      - LC_CTYPE=en_US.UTF-8
+    # networks:
+    #   - todo_trf_network
+
+  # api_gateway:
+  #   image: node:alpine
+  #   volumes:
+  #     - ./api_gateway:/app
+  #   working_dir: /app
+  #   command: sh -c "npm install && npm start"
+  #   depends_on:
+  #     - proxy
+  #     - app
+  #     - db
+  #     - redis
+  #     - pg
+
+networks:
+  todo_trf_network:
+    name: todo_trf_network
+    driver: bridge
+
+volumes:
+  postgres_data:
