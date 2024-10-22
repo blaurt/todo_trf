@@ -9,13 +9,14 @@ import { ClsModule } from 'nestjs-cls';
 import { PublicApiModule } from './http-api/v1/public-api.module';
 import { AppLoggerModule } from './utils/app-logger/app-logger.module';
 import { v4 } from 'uuid';
-import { AuthController } from './http-api/v1/controllers/auth.controller';
-import { CqrsModule } from '@nestjs/cqrs';
-import { AuthModule } from './domain/auth/auth.module';
+import { RouterModule } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './http-api/v1/all-exceptions.filter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.local', '.env.test'],
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
@@ -31,9 +32,20 @@ import { AuthModule } from './domain/auth/auth.module';
         idGenerator: () => v4(),
       },
     }),
-   
-    AppLoggerModule,
     PublicApiModule,
+    AppLoggerModule,
+    RouterModule.register([
+      {
+        path: 'api/v1',
+        module: PublicApiModule,
+      },
+    ]),
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule {}

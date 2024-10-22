@@ -13,37 +13,35 @@ export class AllExceptionsFilter implements ExceptionFilter {
   ) {}
 
   public catch(exception: HttpException, host: ArgumentsHost) {
-    console.log('🚀 ~ AllExceptionsFilter ~ exception:', exception, exception instanceof ZodError);
-    // In certain situations `httpAdapter` might not be available in the
-    // constructor method, thus we should resolve it here.
-
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    let httpStatus;
+    let httpStatus: number;
     let message;
+    let details;
+
+    response.setHeader('x-trace-id', this.cls.getId());
     switch (true) {
       case exception instanceof HttpException:
         httpStatus = exception.getStatus();
         message = exception.getResponse();
+        return response.status(httpStatus).send(message);
         break;
       case exception instanceof ZodError:
         httpStatus = HttpStatus.BAD_REQUEST;
-        message = (exception as ZodError).issues;
+        message = 'Validation error';
+        details = (exception as ZodError).errors;
         break;
       default:
         httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        message = "Internal server error";
+        message = 'Internal server error';
         break;
     }
-    exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
+    // todo add path, timestamp, response code, traceId
     const responseBody = {
-      statusCode: httpStatus,
-      traceId: this.cls.getId(),
-      timestamp: new Date().toISOString(),
-      path: request.url,
       message,
+      details,
     };
 
     response.status(httpStatus).send(responseBody);

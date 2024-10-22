@@ -1,4 +1,14 @@
-import { Body, Controller, NotImplementedException, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  NotImplementedException,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Request, Response } from 'express';
@@ -36,7 +46,7 @@ export class AuthController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  // @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Creates new quote request' })
   @ApiResponse({
     status: 200,

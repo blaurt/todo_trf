@@ -16,20 +16,11 @@ async function bootstrap() {
   const envService = app.get(EnvService);
 
   app.enableShutdownHooks();
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-
   app.enableVersioning({
     type: VersioningType.URI,
   });
 
   app.getHttpAdapter().getInstance().disable('x-powered-by');
-  // app.use(
-  //   new ClsMiddleware({
-  //     // generateId: true,
-  //     // idGenerator: () => v4(),
-  //   }).use,
-  // );
   const config = new DocumentBuilder()
     .setTitle(`${envService.get('SERVICE_NAME')} api`)
     .setDescription(`${envService.get('SERVICE_NAME')} api description`)
@@ -38,9 +29,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
-
-  // app.useGlobalFilters(new AllExceptionsFilter());
-  app.useGlobalFilters(new AllExceptionsFilter(app.get(ClsService), app.get(AppLoggerService)));
 
   await app.listen(port);
 }
