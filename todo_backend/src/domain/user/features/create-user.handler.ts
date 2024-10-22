@@ -1,5 +1,5 @@
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
-import { UserRepository } from '../user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { User } from '../user.entity';
 import { UserStatus } from '../user-status.enum';
 import { EnvService } from 'src/utils/env/env.service';

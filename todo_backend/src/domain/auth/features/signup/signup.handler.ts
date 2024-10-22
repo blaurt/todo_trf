@@ -2,8 +2,8 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandBus, CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from 'src/domain/user/features/create-user.handler';
 import { FindUserByEmailQuery } from 'src/domain/user/features/find-by-email.handler';
-import { UserRepository } from 'src/domain/user/user.repository';
-import { AppLoggerService } from 'src/utils/app-logger/app-logger.service';
+import { UserRepository } from 'src/domain/user/repositories/user.repository';
+ import { AppLoggerService } from 'src/utils/app-logger/app-logger.service';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { z } from 'zod';
 

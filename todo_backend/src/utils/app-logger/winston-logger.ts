@@ -8,13 +8,17 @@ export class WinstonLogger implements LoggerService {
 
   constructor() {
     this.logger = createLogger({
-      format: format.combine(format.json(), format.timestamp()),
+      format: format.combine(format.timestamp(), format.prettyPrint()),
       transports: [
         new transports.Console({
           format:
             process.env.NODE_ENV === 'production'
               ? format.simple()
               : format.combine(format.colorize(), format.simple()),
+        }),
+        new transports.File({
+          filename: `logfile.log`,
+          dirname: 'logs',
         }),
       ],
     });

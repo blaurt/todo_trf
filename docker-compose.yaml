@@ -27,26 +27,15 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=todo_trf_user
+      - POSTGRES_PASSWORD=todo_trf_password
       - LANG=en_US.utf8
       - LC_COLLATE=C
       - LC_CTYPE=en_US.UTF-8
     # networks:
     #   - todo_trf_network
 
-  # api_gateway:
-  #   image: node:alpine
-  #   volumes:
-  #     - ./api_gateway:/app
-  #   working_dir: /app
-  #   command: sh -c "npm install && npm start"
-  #   depends_on:
-  #     - proxy
-  #     - app
-  #     - db
-  #     - redis
-  #     - pg
+   
 
 networks:
   todo_trf_network:

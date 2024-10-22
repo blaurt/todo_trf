@@ -1,6 +1,6 @@
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { User } from '../user.entity';
-import { UserRepository } from '../user.repository';
+import { UserRepository } from '../repositories/user.repository';
 import { NotFoundError } from 'rxjs';
 import { NotFoundException } from '@nestjs/common';
 

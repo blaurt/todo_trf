@@ -1,36 +1,18 @@
 import { NotFoundException } from '@nestjs/common';
 import { CommandBus, CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
+import { UserRepository } from 'src/domain/user/repositories/user.repository';
 import { User } from 'src/domain/user/user.entity';
-import { UserRepository } from 'src/domain/user/user.repository';
 import { AppLoggerService } from 'src/utils/app-logger/app-logger.service';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { EnvService } from 'src/utils/env/env.service';
 import { z } from 'zod';
-
-class UserPublicProperties {
-  id: string;
-  firstName: string;
-
-  lastName: string;
-
-  email: string;
-
-  createdAt: Date;
-
-  constructor(user: User) {
-    this.createdAt = user.createdAt;
-    this.email = user.email;
-    this.firstName = user.firstName;
-    this.id = user.id;
-    this.lastName = user.lastName;
-  }
-}
+import { JwtPayload } from '../../jwt-payload.dto';
 
 export class LoginResult {
   access_token: string;
   refresh_token: string;
-  user: UserPublicProperties;
+  user: JwtPayload;
 
   constructor(params: Partial<LoginResult>) {
     Object.assign(this, params);
@@ -75,7 +57,7 @@ export class UserLoginHandler implements ICommandHandler<UserLoginCommand> {
       throw new NotFoundException('Invalid email or password');
     }
 
-    const userData = new UserPublicProperties(user);
+    const userData = new JwtPayload(user);
 
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync({ ...userData }, { expiresIn: this.env.get('JWT_ACCESS_TOKEN_TTL') }),

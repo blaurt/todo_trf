@@ -27,14 +27,14 @@ export class AppLoggerService implements LoggerService, OnModuleInit {
       format.timestamp(),
       format.json(),
     ];
-    if (process.env.APP_ENV === 'local') {
+    // if (process.env.APP_ENV === 'local') {
       formats.pop();
       formats.push(
         format.prettyPrint({
           colorize: true,
         })
       );
-    }
+    // }
 
     this.logger = createLogger({
       format: format.combine(...formats),

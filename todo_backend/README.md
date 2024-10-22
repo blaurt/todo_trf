@@ -1,26 +1,5 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Todo-List trf api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
@@ -30,27 +9,18 @@
 
 ```bash
 $ npm install
+docker compose up
 ```
 
 ## Compile and run the project
 
 ```bash
-# development
 $ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## Run tests
 
 ```bash
-# unit tests
-$ npm run test
-
 # e2e tests
 $ npm run test:e2e
 
@@ -58,29 +28,21 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Resources
+# API first
+you can find swagger here:
+http://localhost:4000/swagger#/
 
-Check out a few resources that may come in handy when working with NestJS:
+# 12 factor app (https://12factor.net/)
+- 1) [+] Codebase is tracked in GIT
+- 2) [+] External dependencies are explicitly declared in docker-compose file. Application won't bootstrap if any dependency is not satisfied
+- 3) [+] Configuration - configuration is done via environment variables (.env.example file is included)
+- 4) [+] Backing services - credentials to external dependencies are to be provided via ENV variables. They are not stored in any hardcoded config files, which means they can be changed without rebuild the app, but with a simple restart
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- 5) [~] Build, release, and run - because deployment pipeline is not set up, it is hard to claim this criteria is fulfilled
+- 6) [+] Stateless process - the app doesn't operate with any implicit state, and purely relies on data provided by data-storage dependency (postgres in our case)
+- 7) [+] Port binding - application is binded on port, specified in ENV vars (4000 by default)
+- 8) [+] Concurrency (scalability) - due to its stateless nature, the application can be horizontally scaled up & down, to handle increasing workload. (At this moment the app doesn't operate with any transaction, nor it assumes concurrent read\write operations on the same resources. If needed - it will be handled by optimistic concurrency, distributed locks, whatever suits the most)
+- 9) [~] Disposability - at this moment the app is simple enough to bootstrap & shutdown quickly enough, to align with horizontal scaling strategies
+- 10) [~] Dev/Prod parity - the app is simple enough, and its dependencies are easy to satisfy, so it can be considered complained with this factor
+- 11) [~] Logs - The application's logger utilizes different transports for logs: STDOUT & STDERR, files. I assume its logs are ready to be consumed as a stream of events, for further processing by any corresponding stack (ELK, Grafana-Loki, ect)
+- 12) [--] Administrative processes - at this moment, migrations are not separated in their own job, but executed each time on application bootstrap for simplicity of development. When time comes to deploy the app in prod\staging environment, migrations (and any other administrative tasks & preparations) will be separated.
