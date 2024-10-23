@@ -11,6 +11,8 @@ import { GetAllTodoListsForUserHandler } from './features/todo-list/get-all-list
 import { GetTodoListByIdHandler } from './features/todo-list/get-list-by-id/get-list-by-ud.handler';
 import { SoftDeleteTodoListHandler } from './features/todo-list/soft-delete-todo-list/soft-delete-todo-list.handler';
 import { UpdateTodoListHandler } from './features/todo-list/update-todo-list/update-todo-list.handler';
+import { CreateTaskHandler } from './features/task/crete-task/crete-task.handler';
+import { TaskRepository } from './repositories/task.repository';
 
 @Module({
   imports: [CqrsModule, UserModule, TypeOrmModule.forFeature([TodoList, Task, User])],
@@ -21,6 +23,9 @@ import { UpdateTodoListHandler } from './features/todo-list/update-todo-list/upd
     GetTodoListByIdHandler,
     UpdateTodoListHandler,
     SoftDeleteTodoListHandler,
+    // tasks
+    TaskRepository,
+    CreateTaskHandler,
   ],
 })
 export class TodoListModule {}

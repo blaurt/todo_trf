@@ -46,3 +46,13 @@ http://localhost:4000/swagger#/
 - 10) [~] Dev/Prod parity - the app is simple enough, and its dependencies are easy to satisfy, so it can be considered complained with this factor
 - 11) [~] Logs - The application's logger utilizes different transports for logs: STDOUT & STDERR, files. I assume its logs are ready to be consumed as a stream of events, for further processing by any corresponding stack (ELK, Grafana-Loki, ect)
 - 12) [--] Administrative processes - at this moment, migrations are not separated in their own job, but executed each time on application bootstrap for simplicity of development. When time comes to deploy the app in prod\staging environment, migrations (and any other administrative tasks & preparations) will be separated.
+
+# Other notes:
+- api-first - you can utilize swagger or any other tool to use the application
+- healthcheck endpoint is available at `/api/v1/health`
+- the app has basis for CQRS approach, which allows it to be easily divided in 2 separate apps\processes: one for read, and other one for write requests
+- each command\query adopts Value-Object behavior (self validation)
+- logger can be used either explicitly, via DI, or implicitly - via @withLogger decorator. Decorator logs method's arguments, returned result, and raised exception (in case of failure)
+- all logs always contain `trace-id` property, which allows logs to be quired for a single request\flow
+- authentication is done with JWT tokens. Currently, there is no feature to blacklist\invalidate tokens.
+- application verifies its configuration on start, to fail fast in case of any misconfiguration

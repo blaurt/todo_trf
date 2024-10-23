@@ -13,6 +13,7 @@ import { RouterModule } from '@nestjs/core';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './http-api/v1/all-exceptions.filter';
 import { PassportModule } from '@nestjs/passport';
+import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
   imports: [

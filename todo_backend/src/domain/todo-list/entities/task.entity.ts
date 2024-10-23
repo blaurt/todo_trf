@@ -27,4 +27,8 @@ export class Task {
   isCompleted(): boolean {
     return !!this.completedAt;
   }
+
+  constructor(partial: Partial<Task>) {
+    Object.assign(this, partial);
+  }
 }
