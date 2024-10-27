@@ -23,7 +23,7 @@ export class JwtAuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.env.get('JWT_SECRET'),
       });
-      request['user'] = payload;
+      request['user'] = payload.userData;
     } catch (error) {
       this.logger.error('JWT token validation failed', {
         errMsg: error.message,

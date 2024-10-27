@@ -26,10 +26,10 @@ export class Add_todolist_tables_1729603001793 implements MigrationInterface {
         )`,
     );
     await queryRunner.query(
-      `ALTER TABLE "todo_lists" ADD CONSTRAINT "FK_0ccba8168dcb33ca73fd63e0c73" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "todo_lists" ADD CONSTRAINT "FK_0ccba8168dcb33ca73fd63e0c73" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE "tasks" ADD CONSTRAINT "FK_ed2187c496930a6950777fd8f6d" FOREIGN KEY ("todoListId") REFERENCES "todo_lists"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "tasks" ADD CONSTRAINT "FK_ed2187c496930a6950777fd8f6d" FOREIGN KEY ("todoListId") REFERENCES "todo_lists"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
   }
 

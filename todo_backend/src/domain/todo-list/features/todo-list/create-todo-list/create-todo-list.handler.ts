@@ -6,13 +6,24 @@ import { UserRepository } from 'src/domain/user/repositories/user.repository';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { BadRequestException } from '@nestjs/common';
 import { TodoListRepository } from '../../../repositories/todo-list.repository';
-import { GetTodoListByIdResponse } from '../../dto/get-list-by-id.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { GetTodoListByIdResponse } from 'src/domain/todo-list/entities/dto/get-list-by-id.dto';
 
 export class CreateTodoListCommand implements ICommand {
+  @ApiProperty({
+    type: String,
+    description: `Name of the list`,
+    example: 'My first list',
+  })
   title: string;
 
   userId: string;
 
+  @ApiProperty({
+    type: Boolean,
+    description: `Whether the list is public or not`,
+    example: false,
+  })
   isPublic: boolean;
 
   private readonly _schema = z.object({
@@ -23,7 +34,6 @@ export class CreateTodoListCommand implements ICommand {
 
   constructor(params: Partial<CreateTodoListCommand>) {
     Object.assign(this, params);
-
     this._schema.parse(this);
   }
 }
@@ -52,7 +62,6 @@ export class CreateTodoListHandler implements ICommandHandler<CreateTodoListComm
         isPublic: command.isPublic,
       }),
     );
-    console.log("🚀 ~ CreateTodoListHandler ~ execute ~ todoList:", todoList)
 
     return new GetTodoListByIdResponse(todoList);
   }

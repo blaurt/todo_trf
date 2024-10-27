@@ -13,16 +13,31 @@ export interface ITaskRepository {
 @Injectable()
 export class TaskRepository implements ITaskRepository {
   constructor(@InjectRepository(Task) private readonly repository: Repository<Task>) {}
+
   upsert(task: Task): Promise<Task> {
-    throw new Error('Method not implemented.');
+    return this.repository.save(task);
   }
+
   findOneById(id: Task['id']): Promise<Task | undefined> {
-    throw new Error('Method not implemented.');
+    return this.repository.findOne({
+      where: { id, deletedAt: null },
+      relations: ['todoList', 'todoList.user'],
+    });
   }
+
   softDelete(id: Task['id']): void {
-    throw new Error('Method not implemented.');
+    this.repository.softDelete(id);
   }
+
   getAllForTodoList(todoListId: Task['todoList']['id']): Promise<Task[]> {
-    throw new Error('Method not implemented.');
+    return this.repository.find({
+      where: {
+        todoList: {
+          id: todoListId,
+        },
+        deletedAt: null,
+      },
+      relations: ['todoList', 'todoList.user'],
+    });
   }
 }

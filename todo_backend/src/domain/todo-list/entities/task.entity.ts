@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TodoList } from './todo-list.entity';
 
 @Entity({ name: 'tasks' })
@@ -18,7 +18,7 @@ export class Task {
   @Column({ nullable: true })
   completedAt: Date;
 
-  @Column({ nullable: true })
+  @DeleteDateColumn({ nullable: true })
   deletedAt: Date;
 
   @ManyToOne(() => TodoList, (todoList) => todoList.tasks)

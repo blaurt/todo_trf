@@ -30,7 +30,7 @@ import { SoftDeleteTodoListCommand } from 'src/domain/todo-list/features/todo-li
 @Controller({
   path: `/todo-lists`,
 })
-export class TodoListController {
+export class TodoListsController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
@@ -43,6 +43,8 @@ export class TodoListController {
     description: 'OK',
   })
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 401, description: 'UNAUTHORIZED' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Get('/')
   @withLogger()
   async getTodoListForUser(
@@ -54,12 +56,14 @@ export class TodoListController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Fetch all todo-lists of a user, based on access-token' })
+  @ApiOperation({ summary: 'Fetch a single todo-list' })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'OK',
   })
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 401, description: 'UNAUTHORIZED' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Get('/:id')
   @withLogger()
   async getTodoListById(@Param('id') id: TodoList['id'], @GetUser() user: JwtPayload): Promise<TodoList | undefined> {
@@ -73,6 +77,8 @@ export class TodoListController {
     description: 'OK',
   })
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 401, description: 'UNAUTHORIZED' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Post('/')
   @withLogger()
   async createTodoList(@Body() body: Record<any, unknown>, @GetUser() user: JwtPayload): Promise<TodoList> {
@@ -86,6 +92,8 @@ export class TodoListController {
     description: 'OK',
   })
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 401, description: 'UNAUTHORIZED' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Patch('/:id')
   @withLogger()
   async updateTodoList(
@@ -103,6 +111,8 @@ export class TodoListController {
     description: 'OK',
   })
   @ApiResponse({ status: 400, description: 'BAD_REQUEST' })
+  @ApiResponse({ status: 401, description: 'UNAUTHORIZED' })
+  @ApiResponse({ status: 404, description: 'NOT_FOUND' })
   @Delete('/:id')
   @withLogger()
   async deleteTodoList(@Param('id') id: TodoList['id'], @GetUser() user: JwtPayload): Promise<void> {

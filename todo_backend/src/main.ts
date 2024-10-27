@@ -8,10 +8,13 @@ import { EnvService } from './utils/env/env.service';
 import { AppLoggerService } from './utils/app-logger/app-logger.service';
 import { initializeDatabase } from './utils/data/data-source';
 import { AllExceptionsFilter } from './http-api/v1/all-exceptions.filter';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   initializeDatabase();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.use(cookieParser());
+
   const port = process.env.PORT;
   const envService = app.get(EnvService);
 

@@ -1,13 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ApiProperty } from '@nestjs/swagger';
+import { GetTodoListByIdResponse } from 'src/domain/todo-list/entities/dto/get-list-by-id.dto';
 import { Task } from 'src/domain/todo-list/entities/task.entity';
 import { TodoList } from 'src/domain/todo-list/entities/todo-list.entity';
 import { TodoListRepository } from 'src/domain/todo-list/repositories/todo-list.repository';
 import { User } from 'src/domain/user/user.entity';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { z } from 'zod';
-import { GetTodoListByIdResponse } from '../../dto/get-list-by-id.dto';
 
 export class GetTodoListByIdQuery implements IQuery {
   readonly userId: User['id'];
@@ -15,6 +15,7 @@ export class GetTodoListByIdQuery implements IQuery {
   @ApiProperty({
     type: String,
     description: `Id of a todo-list`,
+    example: 'ca2aae28-dc31-4cda-a549-13201f12f18a',
   })
   readonly todoListId: string;
 

@@ -1,11 +1,11 @@
 import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ApiProperty } from '@nestjs/swagger';
+import { GetTodoListByIdResponse } from 'src/domain/todo-list/entities/dto/get-list-by-id.dto';
 import { TodoList } from 'src/domain/todo-list/entities/todo-list.entity';
 import { TodoListRepository } from 'src/domain/todo-list/repositories/todo-list.repository';
 import { User } from 'src/domain/user/user.entity';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { z } from 'zod';
-import { GetTodoListByIdResponse } from '../../dto/get-list-by-id.dto';
 
 export class GetAllTodoListsForUserResponse {
   @ApiProperty({
@@ -18,6 +18,7 @@ export class GetAllTodoListsForUserResponse {
   @ApiProperty({
     type: Number,
     description: `Total number of todo-lists for the user`,
+    example: 20,
   })
   total: number;
 }
@@ -28,12 +29,14 @@ export class GetAllTodoListsForUserQuery implements IQuery {
   @ApiProperty({
     type: Number,
     description: `Page number`,
+    example: 0,
   })
   readonly skip: number;
 
   @ApiProperty({
     type: Number,
     description: `Page size`,
+    example: 10,
   })
   readonly limit: number;
 

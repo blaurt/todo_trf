@@ -1,22 +1,28 @@
 services:
-  # nextjs-app:
-  #   container_name: todo_trf_front_end
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '3000:3000'
-  #   environment:
-  #     - NODE_ENV=production
-  #   restart: unless-stopped
+  public_app:
+    container_name: todo_trf_frontend
+    build:
+      context: ./todo_public_web
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    env_file:
+      - ./todo_public_web/.env
 
 
-  # app:
-  #   image: node:alpine
-  #   volumes:
-  #     - .:/app
-  #   working_dir: /app
-  #   command: sh -c "npm install && npm start"
+  backend:
+    container_name: todo_trf_backend
+    restart: unless-stopped
+    build:
+      context: ./todo_backend
+      dockerfile: Dockerfile
+    env_file:
+      - ./todo_backend/.env
+    ports:
+      - "4000:4000"
 
   postgres_db:
     container_name: postgres_db
@@ -32,15 +38,7 @@ services:
       - LANG=en_US.utf8
       - LC_COLLATE=C
       - LC_CTYPE=en_US.UTF-8
-    # networks:
-    #   - todo_trf_network
-
-   
-
-networks:
-  todo_trf_network:
-    name: todo_trf_network
-    driver: bridge
+    
 
 volumes:
   postgres_data:

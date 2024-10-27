@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { GetTodoListByIdResponse } from 'src/domain/todo-list/entities/dto/get-list-by-id.dto';
 import { TodoList } from 'src/domain/todo-list/entities/todo-list.entity';
 import { TodoListRepository } from 'src/domain/todo-list/repositories/todo-list.repository';
 import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { z } from 'zod';
-import { GetTodoListByIdResponse } from '../../dto/get-list-by-id.dto';
 
 export class UpdateTodoListCommand implements ICommand {
   todoListId: TodoList['id'];

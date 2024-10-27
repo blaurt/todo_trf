@@ -8,6 +8,7 @@ import { withLogger } from 'src/utils/app-logger/with-logger.decorator';
 import { EnvService } from 'src/utils/env/env.service';
 import { z } from 'zod';
 import { JwtPayload } from '../../jwt-payload.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class LoginResult {
   access_token: string;
@@ -20,7 +21,20 @@ export class LoginResult {
 }
 
 export class UserLoginCommand implements ICommand {
+  @ApiProperty({
+    type: String,
+    description: 'User email',
+    example: 'email@example.com',
+    required: true,
+  })
   readonly email: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'User email',
+    example: 'mypassword123',
+    required: true,
+  })
   readonly password: string;
 
   private readonly _schema = z.object({
@@ -60,8 +74,8 @@ export class UserLoginHandler implements ICommandHandler<UserLoginCommand> {
     const userData = new JwtPayload(user);
 
     const [access_token, refresh_token] = await Promise.all([
-      this.jwtService.signAsync({ ...userData }, { expiresIn: this.env.get('JWT_ACCESS_TOKEN_TTL') }),
-      this.jwtService.signAsync({ ...userData }, { expiresIn: this.env.get('JWT_REFRESH_TOKEN_TTL') }),
+      this.jwtService.signAsync({ userData }, { expiresIn: this.env.get('JWT_ACCESS_TOKEN_TTL') }),
+      this.jwtService.signAsync({ userData }, { expiresIn: this.env.get('JWT_REFRESH_TOKEN_TTL') }),
     ]);
 
     return new LoginResult({

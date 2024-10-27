@@ -28,7 +28,7 @@ export class TodoListRepository implements ITodoListRepository {
       },
       skip,
       take: limit,
-      relations: ['user'],
+      relations: ['user', 'tasks'],
     });
 
     return {
@@ -38,7 +38,7 @@ export class TodoListRepository implements ITodoListRepository {
   }
 
   findOneById(id: TodoList['id']): Promise<TodoList | undefined> {
-    return this.repo.findOne({ relations: ['user'], where: { id, deletedAt: null } });
+    return this.repo.findOne({ relations: ['user', 'tasks'], where: { id, deletedAt: null } });
   }
 
   upsert(todoList: TodoList): Promise<TodoList> {

@@ -1,21 +1,17 @@
-# Todo-List trf api
+# Todo-List api
 
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
+ 
 ## Project setup
 
 ```bash
 $ npm install
-docker compose up
+
 ```
 
 ## Compile and run the project
 
 ```bash
-$ npm run start
+$ npm run start:debug
 ```
 
 ## Run tests
@@ -24,8 +20,6 @@ $ npm run start
 # e2e tests
 $ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
 ```
 
 # API first
@@ -50,9 +44,21 @@ http://localhost:4000/swagger#/
 # Other notes:
 - api-first - you can utilize swagger or any other tool to use the application
 - healthcheck endpoint is available at `/api/v1/health`
-- the app has basis for CQRS approach, which allows it to be easily divided in 2 separate apps\processes: one for read, and other one for write requests
+- the app has basis for CQRS approach, which allows it to be easily divided in 2 separate apps: one for read, and other one for write requests
+- CQRS commands\queries are placed alongside their corresponding handlers for easier navigation in the codebase
 - each command\query adopts Value-Object behavior (self validation)
 - logger can be used either explicitly, via DI, or implicitly - via @withLogger decorator. Decorator logs method's arguments, returned result, and raised exception (in case of failure)
 - all logs always contain `trace-id` property, which allows logs to be quired for a single request\flow
 - authentication is done with JWT tokens. Currently, there is no feature to blacklist\invalidate tokens.
 - application verifies its configuration on start, to fail fast in case of any misconfiguration
+- all data removal follows "soft-delete" approach
+
+# Things to do next:
+- finish backend api tests
+- add tools for monitoring & logs (ELK, Graphana&Loki)
+- split app into 2 ones, to separate read & write operations
+- add reset\forgot password flow
+- add email confirmation
+- move email confirmation in a separate app, which should be a queue consumer (RabbitMQ\SQS\Bull)
+- add JWT-token blacklist
+- implement admin-api
